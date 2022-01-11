@@ -26,7 +26,7 @@ def create_app(cfg=None):
     def episode(series: str, season: int, episode: int):
         runner = CliRunner()
         result = runner.invoke(
-            kintro.cli, 
+            kintro.cli,
             [
                 "--log-level",
                 kintro_log_level,
