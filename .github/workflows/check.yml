@@ -97,6 +97,15 @@ jobs:
           timeout: 10000
           interval: 2000
       - uses: actions/checkout@v1
+      - uses: actions/checkout@master
+        with:
+          repository: neckbeard-io/kintro
+          path: ./kintro
+      - name: Get kintro latest tag
+        run: |
+          pushd kintro
+          echo "KINTRO_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+          popd
       - name: Login to DockerHub Registry
         uses: docker/login-action@v1
         with:
@@ -109,5 +118,5 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.NECKBEARD_IO_DOCKERHUB_USERNAME }}
         run: |
           cd docker
-          DOCKER_BUILDKIT=1 docker build --target kintro-web-pkg -t ${DOCKERHUB_USERNAME}/kintro-web:${{github.ref_name}}-${PYTHON_VERSION}-${PYTHON_BASE} --build-arg KINTRO_VERSION=${{github.ref_name}} --build-arg KINTRO_WEB_VERSION=${{github.ref_name}} --build-arg PYTHON_VERSION=${PYTHON_VERSION} --build-arg PYTHON_BASE=${PYTHON_BASE} .
-          docker push ${DOCKERHUB_USERNAME}/kintro-web:${{github.ref_name}}-${PYTHON_VERSION}-${PYTHON_BASE}
+          DOCKER_BUILDKIT=1 docker build --target kintro-web-pkg -t ${DOCKERHUB_USERNAME}/kintro-web:${{github.ref_name}}-${KINTRO_TAG}-${PYTHON_VERSION}-${PYTHON_BASE} --build-arg KINTRO_VERSION=${KINTRO_TAG} --build-arg KINTRO_WEB_VERSION=${{github.ref_name}} --build-arg PYTHON_VERSION=${PYTHON_VERSION} --build-arg PYTHON_BASE=${PYTHON_BASE} .
+          docker push ${DOCKERHUB_USERNAME}/kintro-web:${{github.ref_name}}-${KINTRO_TAG}-${PYTHON_VERSION}-${PYTHON_BASE}
