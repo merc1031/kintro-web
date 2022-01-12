@@ -62,6 +62,7 @@ def create_app(cfg=None):
                 "1",
                 "--worker-batch-size",
                 "1",
+                "--analyze-if-intro-missing",
             ],
             catch_exceptions=False,
         )
