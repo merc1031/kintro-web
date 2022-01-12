@@ -100,10 +100,11 @@ jobs:
       - uses: actions/checkout@master
         with:
           repository: neckbeard-io/kintro
-          path: ./kintro
+          path: ../kintro
       - name: Get kintro latest tag
         run: |
-          pushd kintro
+          pushd ../kintro
+          git fetch --tags
           echo "KINTRO_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
           popd
       - name: Login to DockerHub Registry
