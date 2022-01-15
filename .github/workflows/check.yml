@@ -101,7 +101,7 @@ jobs:
       - name: Really wait for pip
         run: |
           while true; do
-            if pip install kintro==asdf |& grep ${{github.ref_name}}; then
+            if pip install kintro-web==asdf |& grep ${{github.ref_name}}; then
               break;
             fi
             sleep 5
