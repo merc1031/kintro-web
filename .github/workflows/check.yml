@@ -107,13 +107,15 @@ jobs:
             sleep 5
           done
       - uses: actions/checkout@v2
+        with:
+          path: ./kintro-web
       - uses: actions/checkout@v2
         with:
           repository: neckbeard-io/kintro
-          path: ../kintro
+          path: ./kintro
       - name: Get kintro latest tag
         run: |
-          pushd ../kintro
+          pushd ./kintro
           git fetch --tags
           echo "KINTRO_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
           popd
@@ -128,6 +130,9 @@ jobs:
           PYTHON_BASE: ${{ matrix.python-base }}
           DOCKERHUB_USERNAME: ${{ secrets.NECKBEARD_IO_DOCKERHUB_USERNAME }}
         run: |
-          cd docker
+          pushd ./kintro-web
+          pushd docker
           DOCKER_BUILDKIT=1 docker build --target kintro-web-pkg -t ${DOCKERHUB_USERNAME}/kintro-web:${{github.ref_name}}-${KINTRO_TAG}-${PYTHON_VERSION}-${PYTHON_BASE} --build-arg KINTRO_VERSION=${KINTRO_TAG} --build-arg KINTRO_WEB_VERSION=${{github.ref_name}} --build-arg PYTHON_VERSION=${PYTHON_VERSION} --build-arg PYTHON_BASE=${PYTHON_BASE} .
           docker push ${DOCKERHUB_USERNAME}/kintro-web:${{github.ref_name}}-${KINTRO_TAG}-${PYTHON_VERSION}-${PYTHON_BASE}
+          popd
+          popd
