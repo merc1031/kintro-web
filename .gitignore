@@ -15,7 +15,10 @@ requirements/.last_python_version
 
 # pycharm stuff
 .idea
-#
+
+# vscode stuff
+.vscode
+
 # setuptools_scm stuff
 kintro/_version.py
 
